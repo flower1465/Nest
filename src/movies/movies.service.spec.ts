@@ -44,6 +44,7 @@ describe('MoviesService', () => {
       }
     });
   });
+
   describe('deleteOne', () => {
     it('deletes a movie', () => {
       service.create({
@@ -55,6 +56,14 @@ describe('MoviesService', () => {
       service.deleteOne(1);
       const afterDelete = service.getAll().length;
       expect(afterDelete).toBeLessThan(beforeDelete);
+    });
+    it('should return a 404', () => {
+      try {
+        service.deleteOne(999);
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
+        expect(e.message).toEqual('Movie with ID 999 not found.');
+      }
     });
   });
 });
