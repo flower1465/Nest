@@ -44,9 +44,6 @@ describe('MoviesService', () => {
       }
     });
   });
-<<<<<<< HEAD
-=======
-
   describe('deleteOne', () => {
     it('deletes a movie', () => {
       service.create({
@@ -60,5 +57,4 @@ describe('MoviesService', () => {
       expect(afterDelete).toBeLessThan(beforeDelete);
     });
   });
->>>>>>> master
 });
