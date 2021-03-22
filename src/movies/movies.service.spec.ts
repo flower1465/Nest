@@ -44,4 +44,21 @@ describe('MoviesService', () => {
       }
     });
   });
+<<<<<<< HEAD
+=======
+
+  describe('deleteOne', () => {
+    it('deletes a movie', () => {
+      service.create({
+        title: 'The movie',
+        genres: ['test'],
+        year: 2020,
+      });
+      const beforeDelete = service.getAll().length;
+      service.deleteOne(1);
+      const afterDelete = service.getAll().length;
+      expect(afterDelete).toBeLessThan(beforeDelete);
+    });
+  });
+>>>>>>> master
 });
