@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { deepStrictEqual } from 'node:assert';
@@ -13,6 +13,13 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
     await app.init();
   });
 
@@ -27,13 +34,13 @@ describe('AppController (e2e)', () => {
     it('GET', () => {
       return request(app.getHttpServer()).get('/movies').expect(200).expect([]);
     });
-    it('POST', () => {
+    it('POST 201', () => {
       return request(app.getHttpServer())
         .post('/movies')
         .send({
           title: 'Test',
           year: 2000,
-          genres: [test],
+          genres: ['test'],
         })
         .expect(201);
     });
@@ -43,10 +50,31 @@ describe('AppController (e2e)', () => {
   });
 
   describe('/movies/:id', () => {
-    it.todo('GET 200', () => {
+    it('GET 200', () => {
       return request(app.getHttpServer()).get('/movies/1').expect(200);
     });
-    it.todo('PATCH');
-    it.todo('DELETE');
+    it('GET 404', () => {
+      return request(app.getHttpServer()).get('/movies/999').expect(404);
+    });
+    it('PATCH 200', () => {
+      return request(app.getHttpServer())
+        .patch('/movies/1')
+        .send({ title: 'Update Test' })
+        .expect(200);
+    });
+    it('POST 400', () => {
+      return request(app.getHttpServer())
+        .post('/movies')
+        .send({
+          title: 'Test',
+          year: 2000,
+          genres: ['test'],
+          other: 'thing',
+        })
+        .expect(400);
+    });
+    it('DELETE 200', () => {
+      return request(app.getHttpServer()).delete('/movies/1').expect(200);
+    });
   });
 });
