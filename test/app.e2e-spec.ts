@@ -7,7 +7,7 @@ import { deepStrictEqual } from 'node:assert';
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -43,7 +43,9 @@ describe('AppController (e2e)', () => {
   });
 
   describe('/movies/:id', () => {
-    it.todo('GET');
+    it.todo('GET 200', () => {
+      return request(app.getHttpServer()).get('/movies/1').expect(200);
+    });
     it.todo('PATCH');
     it.todo('DELETE');
   });
