@@ -1,3 +1,3 @@
 # Nest
 
-Learn-Nestjs
+Nestjs learned by watching Nomad Coders
